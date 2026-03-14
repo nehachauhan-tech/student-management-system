@@ -6,7 +6,17 @@ A robust Student Management System built with Django.
 This system provides an intuitive interface to manage student records, handles user authentication, and includes a responsive frontend design.
 
 ## Screenshots
-*(Screenshots will be added here)*
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Student List
+![Student List](screenshots/students_list.png)
+
+### Add Student
+![Add Student](screenshots/add_student.png)
+
+### Login
+![Login](screenshots/login.png)
 
 ## Setup Instructions
 
