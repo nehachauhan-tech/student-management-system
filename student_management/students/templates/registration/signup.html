@@ -1,0 +1,91 @@
+{% extends "students/base.html" %}
+
+{% block title %}Sign Up | Student Management{% endblock %}
+
+{% block extra_css %}
+<style>
+    .sidebar {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-color);
+        min-height: 100vh;
+    }
+
+    .signup-container {
+        width: 100%;
+        max-width: 500px;
+        padding: 20px;
+    }
+
+    .signup-card {
+        border: none;
+        box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block header_section %}{% endblock %}
+
+{% block content %}
+<div class="signup-container animate-in">
+    <div class="text-center mb-4">
+        <div class="d-inline-flex p-3 rounded-circle text-white mb-3 shadow-lg"
+            style="background: linear-gradient(135deg, var(--primary-accent) 0%, var(--secondary-accent) 100%);">
+            <i data-lucide="user-plus" style="width: 36px; height: 36px;"></i>
+        </div>
+        <h2 class="fw-bold display-6" style="letter-spacing: -0.04em; color: var(--text-main);">Create Account</h2>
+        <p class="text-muted">Join the Student Management System today</p>
+    </div>
+
+    <div class="premium-card signup-card p-4">
+        <form method="POST" id="signup-form">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.05em;">{{
+                    field.label }}</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0"><i data-lucide="edit-3"
+                            style="width: 16px; color: var(--primary-accent);"></i></span>
+                    {{ field }}
+                </div>
+                {% if field.help_text %}
+                <div class="form-text small" style="font-size: 0.7rem;">{{ field.help_text|safe }}</div>
+                {% endif %}
+                {% if field.errors %}
+                {% for error in field.errors %}
+                <div class="text-danger small mt-1" style="font-size: 0.75rem;">{{ error }}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-premium w-100 py-3 mt-4 mb-3">
+                Register & Get Started
+            </button>
+        </form>
+
+        <div class="text-center border-top pt-4">
+            <p class="small text-muted mb-0">Already registered? <a href="{% url 'login' %}"
+                    class="fw-bold text-decoration-none" style="color: var(--primary-accent);">Log In here</a></p>
+        </div>
+    </div>
+
+    <p class="text-center text-muted small mt-5">&copy; 2026 Student Management Hub</p>
+</div>
+
+<script>
+    // Style Django forms correctly
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+        el.className += ' form-control bg-light border-0 py-2';
+    });
+</script>
+{% endblock %}

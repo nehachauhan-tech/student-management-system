@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Student Management{% endblock %}</title>
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg-color: #f5f7ff;
+            --sidebar-bg: #1e1b4b;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --sidebar-text: rgba(255, 255, 255, 0.65);
+            --sidebar-active: #ffffff;
+            --border-color: #e2e8f0;
+            --sidebar-width: 270px;
+            --primary-accent: #6366f1;
+            --secondary-accent: #a855f7;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0b0e14;
+            --sidebar-bg: #000000;
+            --card-bg: #161b22;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --sidebar-text: rgba(255, 255, 255, 0.5);
+            --sidebar-active: #ffffff;
+            --border-color: #30363d;
+            --primary-accent: #818cf8;
+            --secondary-accent: #c084fc;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background-color: var(--sidebar-bg);
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 2.5rem 1.8rem;
+            z-index: 1000;
+            transition: var(--transition);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-brand {
+            font-weight: 800;
+            font-size: 1.4rem;
+            margin-bottom: 3.5rem;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-link {
+            color: var(--sidebar-text);
+            padding: 0.9rem 1.2rem;
+            border-radius: 14px;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: var(--transition);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--sidebar-active);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(168, 85, 247, 0.1) 100%);
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2.5rem 4rem;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* Card Styling */
+        .premium-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .premium-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.15);
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, var(--primary-accent) 0%, var(--secondary-accent) 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 14px;
+            padding: 0.9rem 2.2rem;
+            font-weight: 700;
+            transition: var(--transition);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
+            opacity: 0.95;
+            color: #ffffff;
+        }
+
+        .bg-indigo-premium {
+            background: linear-gradient(135deg, var(--primary-accent) 0%, var(--secondary-accent) 100%) !important;
+            color: white !important;
+        }
+
+        .text-indigo-premium {
+            color: var(--primary-accent) !important;
+        }
+
+        .bg-indigo-light {
+            background: rgba(99, 102, 241, 0.1) !important;
+            color: var(--primary-accent) !important;
+        }
+
+
+
+        /* Theme Toggle Header */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .sun-icon {
+            color: #f1c40f !important;
+        }
+
+        .moon-icon {
+            color: #2c3e50 !important;
+        }
+
+        [data-theme="dark"] .moon-icon {
+            color: #ffffff !important;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 0;
+                padding: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 2rem;
+            }
+        }
+
+        /* Interactive Elements */
+        .animate-in {
+            animation: fadeIn 0.6s ease-out backwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="animate-in">
+
+    <aside class="sidebar d-flex flex-column">
+        <div class="sidebar-brand">
+            <div class="p-2 rounded-3 bg-white d-flex align-items-center justify-content-center"
+                style="width: 42px; height: 42px;">
+                <i data-lucide="graduation-cap" style="color: #000; width: 24px; height: 24px;"></i>
+            </div>
+            <span>Student Management</span>
+        </div>
+
+        <nav class="nav-links flex-grow-1">
+            <a href="{% url 'dashboard' %}"
+                class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                <i data-lucide="layout-dashboard" style="width: 20px;"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="{% url 'home' %}"
+                class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                <i data-lucide="users" style="width: 20px;"></i>
+                <span>Students List</span>
+            </a>
+            <a href="{% url 'add_student' %}"
+                class="nav-link {% if request.resolver_match.url_name == 'add_student' %}active{% endif %}">
+                <i data-lucide="user-plus" style="width: 20px;"></i>
+                <span>Add Student</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+
+
+            {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="nav-link w-100 border-0 bg-transparent text-start">
+                    <i data-lucide="log-out" style="width: 20px;"></i>
+                    <span>Logout Session</span>
+                </button>
+            </form>
+            {% else %}
+            <div class="d-grid gap-2">
+                <a href="{% url 'login' %}" class="nav-link">
+                    <i data-lucide="log-in" style="width: 20px;"></i>
+                    <span>Login</span>
+                </a>
+                <a href="{% url 'signup' %}" class="nav-link">
+                    <i data-lucide="user-plus" style="width: 20px;"></i>
+                    <span>Create Account</span>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </aside>
+
+    <main class="main-content">
+        {% block header_section %}
+        <header class="d-flex justify-content-between align-items-center mb-5 pb-2">
+            <div>
+                <h1 class="display-6 fw-bold mb-1" style="letter-spacing: -0.03em;">{% block header %}{% endblock %}
+                </h1>
+                <p class="text-muted small mb-0">Experience the future of student data management.</p>
+            </div>
+            <div class="header-actions">
+                <button id="theme-toggle" class="theme-toggle" title="Toggle Theme">
+                    <i id="theme-icon" data-lucide="sun" style="width: 22px; height: 22px;"></i>
+                </button>
+
+                {% if user.is_authenticated %}
+                <div class="user-profile p-2 px-4 rounded-pill shadow-sm border"
+                    style="background: var(--card-bg); border-color: var(--border-color) !important;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-dark text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                            style="width: 36px; height: 36px; font-size: 0.9rem; border: 2px solid #fff;">
+                            {{ user.username|first|upper }}
+                        </div>
+                        <div class="d-none d-md-block">
+                            <div class="small fw-bold">{{ user.username }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+        </header>
+        {% endblock %}
+
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-premium mb-4 border-0 shadow-sm animate-in">
+            <div class="d-flex align-items-center gap-2">
+                <i data-lucide="info" style="width: 18px;"></i>
+                {{ message }}
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="content-wrapper">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcon(newTheme);
+        });
+
+        function updateIcon(theme) {
+            const isDark = theme === 'dark';
+            // In light theme, show moon (to switch to dark)
+            // In dark theme, show sun (to switch to light)
+            themeIcon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+
+            // Apply colors: Sun (Yellow), Moon (Deep Black/Slate)
+            themeIcon.classList.remove('sun-icon', 'moon-icon');
+            themeIcon.classList.add(isDark ? 'sun-icon' : 'moon-icon');
+
+            lucide.createIcons();
+        }
+
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+{% extends "students/base.html" %}
+
+{% block title %}Students | Student Management{% endblock %}
+{% block header %}Students Database{% endblock %}
+
+{% block content %}
+<div class="premium-card mb-4">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <form method="GET" class="d-flex">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0 pe-0" style="border-radius: 12px 0 0 12px;">
+                        <i data-lucide="search" style="width: 18px; color: var(--text-muted);"></i>
+                    </span>
+                    <input type="text" name="search" class="form-control bg-light border-0 ps-3 py-2"
+                        style="border-radius: 0 12px 12px 0;" placeholder="Search by student name..."
+                        value="{{ request.GET.search|default:'' }}">
+                    <button class="btn btn-premium px-4 ms-2" type="submit">Search Now</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <a href="{% url 'add_student' %}" class="btn btn-premium d-inline-flex align-items-center gap-2">
+                <i data-lucide="plus-circle" style="width: 18px;"></i>
+                New Student
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="premium-card">
+    <div class="table-responsive">
+        <table class="table table-hover table-premium mb-0">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Email Address</th>
+                    <th>Age</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr class="align-middle">
+                    <td>
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="p-2 rounded-circle fw-bold d-flex align-items-center justify-content-center"
+                                style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%); color: var(--primary-accent);">
+                                {{ student.name|first|upper }}
+                            </div>
+                            <span class="fw-semibold">{{ student.name }}</span>
+                        </div>
+                    </td>
+                    <td class="text-muted">{{ student.email }}</td>
+                    <td>
+                        <span class="badge px-3 py-2 rounded-pill"
+                            style="background: rgba(99, 102, 241, 0.08); color: var(--primary-accent); border: 1px solid rgba(99, 102, 241, 0.1);">
+                            {{ student.age }} yrs old
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{% url 'update_student' student.id %}" class="btn btn-sm"
+                                style="color: var(--primary-accent); background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.1);"
+                                title="Edit">
+                                <i data-lucide="edit-3" style="width: 16px;"></i>
+                            </a>
+                            <a href="{% url 'delete_student' student.id %}" class="btn btn-sm"
+                                style="color: #ef4444; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.1);"
+                                title="Delete"
+                                onclick="return confirm('Are you sure you want to delete this student?')">
+                                <i data-lucide="trash-2" style="width: 16px;"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center py-5">
+                        <i data-lucide="user-x" class="text-muted mb-3" style="width: 48px; height: 48px;"></i>
+                        <p class="text-muted mb-0">No students found matching your search.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if students.has_other_pages %}
+    <nav class="mt-4">
+        <ul class="pagination pagination-sm justify-content-center border-0">
+            {% if students.has_previous %}
+            <li class="page-item"><a class="page-link border-0 rounded px-3"
+                    href="?page={{ students.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"><i
+                        data-lucide="chevron-left" style="width: 16px;"></i></a></li>
+            {% endif %}
+
+            {% for num in students.paginator.page_range %}
+            <li class="page-item {% if students.number == num %}active{% endif %}">
+                <a class="page-link border-0 mx-1 rounded px-3 {% if students.number == num %}bg-indigo-premium{% else %}text-muted bg-light{% endif %}"
+                    href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ num
+                    }}</a>
+
+            </li>
+            {% endfor %}
+
+            {% if students.has_next %}
+            <li class="page-item"><a class="page-link border-0 rounded px-3"
+                    href="?page={{ students.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"><i
+                        data-lucide="chevron-right" style="width: 16px;"></i></a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "students/base.html" %}
+
+{% block title %}Update Student | Student Management{% endblock %}
+{% block header %}Update Student Information{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center animate-in">
+    <div class="col-lg-6">
+        <div class="premium-card">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="p-3 bg-indigo-light rounded-circle">
+                    <i data-lucide="user" style="width: 24px; height: 24px;"></i>
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-bold">{{ student.name }}</h5>
+                    <p class="text-muted small mb-0">Editing record #{{ student.id }}</p>
+                </div>
+            </div>
+
+            <hr class="mb-4" style="opacity: 0.1;">
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-muted text-uppercase" style="letter-spacing: 0.05em;">{{
+                        field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                    <div class="text-danger small mt-1" style="font-size: 0.75rem;">{{ field.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <div class="d-grid gap-3 mt-5">
+                    <button type="submit" class="btn btn-premium">
+                        <i data-lucide="refresh-cw" style="width: 18px;" class="me-2"></i>
+                        Update Student File
+                    </button>
+                    <a href="{% url 'home' %}" class="btn btn-light py-3 border-0"
+                        style="background: rgba(0,0,0,0.03); color: var(--text-muted); border-radius: 14px; font-weight: 600;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+        el.className += ' form-control bg-light border-0 py-2';
+    });
+</script>
+{% endblock %}
